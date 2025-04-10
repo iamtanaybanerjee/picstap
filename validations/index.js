@@ -12,4 +12,14 @@ const validateUserEmail = (user) => {
   return errors;
 };
 
-module.exports = { validateUserBodyParams, validateUserEmail };
+const validateSearchPhotosQueryParam = (query) => {
+  let error;
+  if (!query) error = "search-term(query) query parameter is required";
+  return error;
+};
+
+module.exports = {
+  validateUserBodyParams,
+  validateUserEmail,
+  validateSearchPhotosQueryParam,
+};
