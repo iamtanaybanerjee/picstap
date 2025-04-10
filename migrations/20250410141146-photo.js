@@ -5,6 +5,11 @@ module.exports = {
       imageUrl: { type: Sequelize.STRING, allowNull: false },
       description: { type: Sequelize.STRING },
       altDescription: { type: Sequelize.STRING },
+      tags: {
+        type: Sequelize.ARRAY(Sequelize.STRING),
+        allowNull: false,
+        defaultValue: [],
+      },
       dateSaved: { type: Sequelize.DATE, defaultValue: Sequelize.NOW },
       userId: {
         type: Sequelize.INTEGER,

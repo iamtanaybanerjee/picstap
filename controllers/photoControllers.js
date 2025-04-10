@@ -1,5 +1,10 @@
 const { axiosInstance } = require("../lib/axios.lib");
-const { validateSearchPhotosQueryParam } = require("../validations/index");
+const {
+  validateSearchPhotosQueryParam,
+  validatePhotoImgURL,
+  validatePhotoTags,
+} = require("../validations/index");
+const { photo: photoModel } = require("../models");
 require("dotenv").config();
 
 const searchPhotos = async (req, res) => {
@@ -7,8 +12,8 @@ const searchPhotos = async (req, res) => {
     throw new Error("Please configure the env file");
 
   const query = req.query.query;
-  const error = validateSearchPhotosQueryParam(query);
 
+  const error = validateSearchPhotosQueryParam(query);
   if (error) return res.status(400).json({ error });
 
   try {
@@ -33,4 +38,22 @@ const searchPhotos = async (req, res) => {
   }
 };
 
-module.exports = { searchPhotos };
+const savePhoto = async (req, res) => {
+  const photo = req.body;
+  try {
+    const error = validatePhotoImgURL(photo);
+    if (error) return res.status(400).json({ error });
+
+    const errors = validatePhotoTags(photo);
+    if (errors.length > 0) return res.status(400).json({ errors });
+
+    const newPhoto = await photoModel.create(photo);
+    return res
+      .status(201)
+      .json({ message: "Photo saved successfully", newPhoto });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
+module.exports = { searchPhotos, savePhoto };

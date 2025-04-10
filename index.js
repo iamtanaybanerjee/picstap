@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const { createUser } = require("./controllers/userControllers");
-const { searchPhotos } = require("./controllers/photoControllers");
+const { searchPhotos, savePhoto } = require("./controllers/photoControllers");
 const { sequelize } = require("./models");
 
 const app = express();
@@ -10,6 +10,7 @@ app.use(cors());
 app.use(express.json());
 
 app.post("/api/users", createUser);
+app.post("/api/photos", savePhoto);
 app.get("/search/photos", searchPhotos);
 
 sequelize

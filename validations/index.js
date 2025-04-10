@@ -18,8 +18,29 @@ const validateSearchPhotosQueryParam = (query) => {
   return error;
 };
 
+const validatePhotoImgURL = (photo) => {
+  let error;
+  if (!photo.imageUrl.startsWith("https://images.unsplash.com/"))
+    error = "Invalid image URL";
+  return error;
+};
+
+const validatePhotoTags = (photo) => {
+  const errors = [];
+  if (photo.tags.length > 5) errors.push("More than 5 tags are not allowed");
+  for (let i = 0; i < photo.tags.length; i++) {
+    if (photo.tags[i].length > 20) {
+      errors.push("More than 20 characters are not allowed for each tag");
+      break;
+    }
+  }
+  return errors;
+};
+
 module.exports = {
   validateUserBodyParams,
   validateUserEmail,
   validateSearchPhotosQueryParam,
+  validatePhotoImgURL,
+  validatePhotoTags,
 };

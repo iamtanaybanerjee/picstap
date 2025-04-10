@@ -12,6 +12,11 @@ module.exports = (sequelize, DataTypes) => {
       altDescription: {
         type: DataTypes.STRING,
       },
+      tags: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        allowNull: false,
+        defaultValue: [],
+      },
       dateSaved: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
@@ -28,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
 
   // Associations
   photo.associate = (models) => {
-    photo.hasMany(models.tag, { foreignKey: "photoId" });
+    photo.hasMany(models.tag, { foreignKey: "photoId", as: "tagAssociations" });
   };
   return photo;
 };
