@@ -7,7 +7,9 @@ const {
 const {
   validateUserBodyParams,
   validateUserEmail,
+  validateUserId,
 } = require("../validations/index");
+const { trackSearchHistory } = require("../services/userServices");
 
 const createUser = async (req, res) => {
   const user = req.body;
@@ -41,4 +43,24 @@ const doesEmailExist = async (email) => {
   }
 };
 
-module.exports = { createUser };
+const getSearchHistory = async (req, res) => {
+  const userId = parseInt(req.query.userId);
+  try {
+    const error = await validateUserId(userId);
+    if (error) return res.status(404).json({ error });
+
+    //get all searchHistories for the userId
+    const searchHistories = await trackSearchHistory(userId);
+
+    if (searchHistories.length === 0)
+      return res
+        .status(404)
+        .json({ message: `No search history is found for id ${userId}` });
+
+    return res.status(200).json({ searchHistory: searchHistories });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
+module.exports = { createUser, getSearchHistory };

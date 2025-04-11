@@ -1,6 +1,9 @@
 const express = require("express");
 const cors = require("cors");
-const { createUser } = require("./controllers/userControllers");
+const {
+  createUser,
+  getSearchHistory,
+} = require("./controllers/userControllers");
 const {
   searchPhotos,
   savePhoto,
@@ -18,6 +21,7 @@ app.post("/api/users", createUser);
 app.post("/api/photos", savePhoto);
 app.post("/api/photos/:photoId/tags", addTagsToPhoto);
 app.get("/api/photos/tag/search", searchPhotoByTag);
+app.get("/api/search-history", getSearchHistory);
 app.get("/search/photos", searchPhotos);
 
 sequelize

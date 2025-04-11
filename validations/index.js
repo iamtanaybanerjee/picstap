@@ -1,4 +1,4 @@
-const { tag: tagModel } = require("../models");
+const { tag: tagModel, user: userModel } = require("../models");
 
 const validateUserBodyParams = (requestBodyObj) => {
   const errors = [];
@@ -74,6 +74,14 @@ const validateSortQuery = (sortQuery) => {
   return error;
 };
 
+const validateUserId = async (userId) => {
+  let error;
+  const user = await userModel.findOne({ where: { id: userId } });
+
+  if (!user) error = "Invalid userId";
+  return error;
+};
+
 module.exports = {
   validateUserBodyParams,
   validateUserEmail,
@@ -84,4 +92,5 @@ module.exports = {
   validateTagListLength,
   validateTag,
   validateSortQuery,
+  validateUserId,
 };
