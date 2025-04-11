@@ -1,3 +1,5 @@
+const { tag: tagModel } = require("../models");
+
 const validateUserBodyParams = (requestBodyObj) => {
   const errors = [];
   if (!requestBodyObj.username) errors.push("Username is required");
@@ -54,6 +56,24 @@ const validateTagListLength = (existingTagList, toBeAddedTagList) => {
   return error;
 };
 
+const validateTag = async (tag) => {
+  let error;
+  const tagObj = await tagModel.findOne({ where: { name: tag } });
+
+  if (!tagObj) error = "Invalid tag";
+
+  return error;
+};
+
+const validateSortQuery = (sortQuery) => {
+  let error;
+
+  if (sortQuery !== "ASC" && sortQuery !== "DESC" && sortQuery !== undefined)
+    error = "Invalid sort query";
+
+  return error;
+};
+
 module.exports = {
   validateUserBodyParams,
   validateUserEmail,
@@ -62,4 +82,6 @@ module.exports = {
   validatePhotoTags,
   validateTags,
   validateTagListLength,
+  validateTag,
+  validateSortQuery,
 };

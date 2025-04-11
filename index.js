@@ -5,6 +5,7 @@ const {
   searchPhotos,
   savePhoto,
   addTagsToPhoto,
+  searchPhotoByTag,
 } = require("./controllers/photoControllers");
 const { sequelize } = require("./models");
 
@@ -16,6 +17,7 @@ app.use(express.json());
 app.post("/api/users", createUser);
 app.post("/api/photos", savePhoto);
 app.post("/api/photos/:photoId/tags", addTagsToPhoto);
+app.get("/api/photos/tag/search", searchPhotoByTag);
 app.get("/search/photos", searchPhotos);
 
 sequelize

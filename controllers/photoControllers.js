@@ -5,9 +5,15 @@ const {
   validatePhotoTags,
   validateTags,
   validateTagListLength,
+  validateTag,
+  validateSortQuery,
 } = require("../validations/index");
 const { photo: photoModel } = require("../models");
-const { updatePhoto, createTag } = require("../services/photoServices");
+const {
+  updatePhoto,
+  createTag,
+  getPhotosByTag,
+} = require("../services/photoServices");
 require("dotenv").config();
 
 const searchPhotos = async (req, res) => {
@@ -102,4 +108,24 @@ const addTagsToPhoto = async (req, res) => {
   }
 };
 
-module.exports = { searchPhotos, savePhoto, addTagsToPhoto };
+const searchPhotoByTag = async (req, res) => {
+  const tag = req.query.tag;
+  const sort = req.query.sort;
+  const userId = parseInt(req.query.userId);
+  try {
+    const error = await validateTag(tag);
+    console.log("error", error);
+    if (error) return res.status(404).json({ error });
+
+    const error2 = validateSortQuery(sort);
+    if (error2) return res.status(400).json({ error: error2 });
+
+    const photos = await getPhotosByTag(tag);
+
+    return res.status(200).json({ photos });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
+module.exports = { searchPhotos, savePhoto, addTagsToPhoto, searchPhotoByTag };
