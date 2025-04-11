@@ -51,6 +51,13 @@ const savePhoto = async (req, res) => {
     if (errors.length > 0) return res.status(400).json({ errors });
 
     const newPhoto = await photoModel.create(photo);
+
+    //create tags in 'tags' table in DB
+    if (newPhoto.tags.length > 0) {
+      for (let i = 0; i < newPhoto.tags.length; i++) {
+        await createTag(newPhoto.tags, newPhoto.id);
+      }
+    }
     return res
       .status(201)
       .json({ message: "Photo saved successfully", newPhoto });
