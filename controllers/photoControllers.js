@@ -120,7 +120,7 @@ const searchPhotoByTag = async (req, res) => {
     const error2 = validateSortQuery(sort);
     if (error2) return res.status(400).json({ error: error2 });
 
-    const photos = await getPhotosByTag(tag);
+    const photos = await getPhotosByTag(tag, sort);
 
     return res.status(200).json({ photos });
   } catch (error) {

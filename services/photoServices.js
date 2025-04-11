@@ -20,7 +20,7 @@ const createTag = async (tagList, photoId) => {
   }
 };
 
-const getPhotosByTag = async (tag) => {
+const getPhotosByTag = async (tag, order) => {
   const tagList = await tagModel.findAll({
     where: { name: tag },
     attributes: ["photoId"],
@@ -34,11 +34,12 @@ const getPhotosByTag = async (tag) => {
 
   console.log("photoIds", photoIds);
 
-  //get photos for each phototId
+  //get photos for each phototId and sort them by dateSaved
   const photoRecords = await photoModel.findAll({
     where: {
       id: { [Op.in]: photoIds },
     },
+    order: [["dateSaved", order === undefined ? "ASC" : order]],
   });
 
   // console.log("photoRecords", photoRecords);
