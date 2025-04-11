@@ -37,10 +37,29 @@ const validatePhotoTags = (photo) => {
   return errors;
 };
 
+const validateTags = (tagList) => {
+  let error;
+  for (let i = 0; i < tagList.length; i++) {
+    if (tagList[i] === "" || tagList[i] === null || tagList[i] === undefined)
+      error = "Tags must be non-empty strings";
+    break;
+  }
+  return error;
+};
+
+const validateTagListLength = (existingTagList, toBeAddedTagList) => {
+  let error;
+  if (existingTagList.length + toBeAddedTagList.length > 5)
+    error = "Not more than 5 tags are allowed";
+  return error;
+};
+
 module.exports = {
   validateUserBodyParams,
   validateUserEmail,
   validateSearchPhotosQueryParam,
   validatePhotoImgURL,
   validatePhotoTags,
+  validateTags,
+  validateTagListLength,
 };

@@ -3,8 +3,11 @@ const {
   validateSearchPhotosQueryParam,
   validatePhotoImgURL,
   validatePhotoTags,
+  validateTags,
+  validateTagListLength,
 } = require("../validations/index");
 const { photo: photoModel } = require("../models");
+const { updatePhoto, createTag } = require("../services/photoServices");
 require("dotenv").config();
 
 const searchPhotos = async (req, res) => {
@@ -56,4 +59,40 @@ const savePhoto = async (req, res) => {
   }
 };
 
-module.exports = { searchPhotos, savePhoto };
+const addTagsToPhoto = async (req, res) => {
+  const tagObj = req.body;
+  const photoId = parseInt(req.params.photoId);
+
+  try {
+    const error = validateTags(tagObj.tags);
+    if (error) return res.status(400).json({ error });
+
+    const photoObj = await photoModel.findOne({ where: { id: photoId } });
+
+    if (!photoObj)
+      return res
+        .status(404)
+        .json({ error: `No photo is found with photoId ${photoId}` });
+
+    const error2 = validateTagListLength(photoObj.tags, tagObj.tags);
+    if (error2) return res.status(400).json({ error: error2 });
+
+    photoObj.tags.push(...tagObj.tags);
+
+    //update photo in the DB
+    const updatedPhotoObj = await updatePhoto(photoId, {
+      tags: photoObj.tags,
+    });
+
+    //add tags in tags table in DB
+    await createTag(tagObj.tags, photoId);
+
+    return res
+      .status(200)
+      .json({ message: "Tags added successfully", photo: updatedPhotoObj });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
+module.exports = { searchPhotos, savePhoto, addTagsToPhoto };
