@@ -1,4 +1,8 @@
-const { tag: tagModel, photo: photoModel } = require("../models");
+const {
+  tag: tagModel,
+  photo: photoModel,
+  searchHistory: searchHistoryModel,
+} = require("../models");
 const { Op } = require("@sequelize/core");
 
 const updatePhoto = async (photoId, updateData) => {
@@ -42,9 +46,19 @@ const getPhotosByTag = async (tag, order) => {
     order: [["dateSaved", order === undefined ? "ASC" : order]],
   });
 
-  // console.log("photoRecords", photoRecords);
-
   return photoRecords;
 };
 
-module.exports = { updatePhoto, createTag, getPhotosByTag };
+const createSearchHistory = async (userId, tag) => {
+  await searchHistoryModel.create({
+    query: tag,
+    userId,
+  });
+};
+
+module.exports = {
+  updatePhoto,
+  createTag,
+  getPhotosByTag,
+  createSearchHistory,
+};

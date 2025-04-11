@@ -13,6 +13,7 @@ const {
   updatePhoto,
   createTag,
   getPhotosByTag,
+  createSearchHistory,
 } = require("../services/photoServices");
 require("dotenv").config();
 
@@ -114,12 +115,15 @@ const searchPhotoByTag = async (req, res) => {
   const userId = parseInt(req.query.userId);
   try {
     const error = await validateTag(tag);
-    console.log("error", error);
     if (error) return res.status(404).json({ error });
 
     const error2 = validateSortQuery(sort);
     if (error2) return res.status(400).json({ error: error2 });
 
+    //save search history
+    await createSearchHistory(userId, tag);
+
+    //get photos
     const photos = await getPhotosByTag(tag, sort);
 
     return res.status(200).json({ photos });
