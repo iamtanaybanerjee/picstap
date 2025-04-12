@@ -1,4 +1,4 @@
-const { axiosInstance } = require("../lib/axios.lib");
+const axiosInstance = require("../lib/axios.lib");
 const {
   validateSearchPhotosQueryParam,
   validatePhotoImgURL,
