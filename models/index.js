@@ -6,7 +6,13 @@ const Sequelize = require("sequelize");
 const process = require("process");
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || "development";
-const config = require(__dirname + "/../config/config.js")[env];
+// const config = require(__dirname + "/../config/config.js")[env];
+const allConfigs = require(__dirname + "/../config/config.js");
+console.log("Available configs:", allConfigs); // TEMP
+console.log("NODE_ENV is:", env); // TEMP
+
+const config = allConfigs["production"]; // <-- hardcoding to check if it works
+
 const db = {};
 
 let sequelize;
