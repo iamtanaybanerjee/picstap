@@ -26,9 +26,41 @@ jest.mock("../lib/axios.lib", () => ({
 jest.mock("../services/photoServices", () => ({
   updatePhoto: jest.fn(),
   createTag: jest.fn(),
+  createSearchHistory: jest.fn(),
+  getPhotosByTag: jest.fn(),
 }));
 
-const { updatePhoto, createTag } = require("../services/photoServices");
+jest.mock("../validations/index", () => ({
+  validateTag: jest.fn(),
+  validateUserBodyParams: jest.fn(),
+  validateUserEmail: jest.fn(),
+  validateSearchPhotosQueryParam: jest.fn(),
+  validatePhotoImgURL: jest.fn(),
+  validatePhotoTags: jest.fn(),
+  validateTags: jest.fn(),
+  validateTagListLength: jest.fn(),
+  validateSortQuery: jest.fn(),
+  validateUserId: jest.fn(),
+}));
+
+const {
+  updatePhoto,
+  createTag,
+  createSearchHistory,
+  getPhotosByTag,
+} = require("../services/photoServices");
+const {
+  validateTag,
+  validateUserBodyParams,
+  validateUserEmail,
+  validateSearchPhotosQueryParam,
+  validatePhotoImgURL,
+  validatePhotoTags,
+  validateTags,
+  validateTagListLength,
+  validateSortQuery,
+  validateUserId,
+} = require("../validations/index");
 
 describe("Photo controller tests", () => {
   beforeEach(() => {
@@ -47,6 +79,9 @@ describe("Photo controller tests", () => {
         userId: 1,
       },
     };
+
+    validatePhotoImgURL.mockReturnValue(undefined);
+    validatePhotoTags.mockReturnValue([]);
 
     photoModel.create.mockResolvedValue({
       id: 1,
@@ -149,6 +184,47 @@ describe("Photo controller tests", () => {
     const res = { json: jest.fn(), status: jest.fn(() => res) };
 
     await addTagsToPhoto(req, res);
+
+    expect(res.json).toHaveBeenCalledWith(mockResponse);
+    expect(res.status).toHaveBeenCalledWith(200);
+  });
+
+  test("should search photos by tag", async () => {
+    const mockResponse = {
+      photos: [
+        {
+          id: 4,
+          imageUrl:
+            "https://images.unsplash.com/photo-1585974738771-84483dd9f89f?ixid=M3w3MzUyOTJ8MHwxfHNlYXJjaHwyfHx6b29tfGVufDB8fHx8MTc0NDI5MTk0M3ww&ixlib=rb-4.0.3",
+          description: "zoom",
+          altDescription: "zoom",
+          tags: ["zoom", "laptop", "tech"],
+
+          userId: 1,
+        },
+      ],
+    };
+
+    validateTag.mockResolvedValue(undefined);
+    validateSortQuery.mockReturnValue(undefined);
+    createSearchHistory.mockResolvedValue();
+    getPhotosByTag.mockResolvedValue([
+      {
+        id: 4,
+        imageUrl:
+          "https://images.unsplash.com/photo-1585974738771-84483dd9f89f?ixid=M3w3MzUyOTJ8MHwxfHNlYXJjaHwyfHx6b29tfGVufDB8fHx8MTc0NDI5MTk0M3ww&ixlib=rb-4.0.3",
+        description: "zoom",
+        altDescription: "zoom",
+        tags: ["zoom", "laptop", "tech"],
+
+        userId: 1,
+      },
+    ]);
+
+    const req = { query: { tag: "laptop", userId: 1, sort: "ASC" } };
+    const res = { json: jest.fn(), status: jest.fn(() => res) };
+
+    await searchPhotoByTag(req, res);
 
     expect(res.json).toHaveBeenCalledWith(mockResponse);
     expect(res.status).toHaveBeenCalledWith(200);
