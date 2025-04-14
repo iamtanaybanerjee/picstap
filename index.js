@@ -34,4 +34,4 @@ sequelize
 // });
 
 // If this is a Vercel deployment, we need to export the app to be handled as a serverless function
-module.exports = app;
+module.exports = app; // Just export the app for serverless
