@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "postinstall": "npm install pg"
+    "vercel-build": "npm install pg && npm run build"
   },
   "keywords": [],
   "author": "",

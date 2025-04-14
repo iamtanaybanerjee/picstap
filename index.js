@@ -29,9 +29,6 @@ sequelize
   .then(() => console.log("Database connected"))
   .catch((error) => console.log("Unable to connect to database", error));
 
-// app.listen(3000, () => {
-//   console.log("server is listening to port 3000");
-// });
-
-// If this is a Vercel deployment, we need to export the app to be handled as a serverless function
-module.exports = app; // Just export the app for serverless
+app.listen(3000, () => {
+  console.log("server is listening to port 3000");
+});
