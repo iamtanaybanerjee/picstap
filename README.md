@@ -27,8 +27,8 @@
 
 ## 🔮 Future Scope
 
-- 🔐 Authentication & Authorization
-- 🌐 OAuth Integration
+- 🔐 Authentication & Authorization – Protect routes and associate data with individual users.
+- 🌐 OAuth Integration – Login via Google or GitHub accounts.
 
  --- 
 
