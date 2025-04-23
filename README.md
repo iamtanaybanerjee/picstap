@@ -6,6 +6,7 @@
 
 ## 📝 Features
 
+-  **Data Modeling** – Designed a relational database with Sequelize models and associations.
 -  **User Creation** – Register new users into the system.
 -  **Photo Search (Unsplash API)** – Fetch high-quality photos via keyword search.
 -  **Add Tags to Photos** – Organize photos with custom tags.
