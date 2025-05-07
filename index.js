@@ -44,8 +44,8 @@ sequelize
   .then(() => console.log("Database connected"))
   .catch((error) => console.log("Unable to connect to database", error));
 
-// app.listen(3000, () => {
-//   console.log("server is listening to port 3000");
-// });
+app.listen(3000, () => {
+  console.log("server is listening to port 3000");
+});
 
 module.exports = app;
