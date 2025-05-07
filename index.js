@@ -18,6 +18,20 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.get("/", (req, res) => {
+  res.send(`
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <title>Picstap API</title>
+      </head>
+      <body>
+        <h1>Welcome to the Picstap Backend</h1>
+        <p>This is the backend server. Please use the API routes to interact with the service.</p>
+      </body>
+    </html>
+  `);
+});
 app.post("/api/users", createUser);
 app.post("/api/photos", savePhoto);
 app.post("/api/photos/:photoId/tags", addTagsToPhoto);
